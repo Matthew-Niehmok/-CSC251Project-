@@ -7,11 +7,6 @@ public class PolicyDemo
 {   
    public static void main(String[] args)
    {
-      /*
-       * We use a "try" and "catch" process. We "try" to open the file and process it, 
-       * but if something goes wrong, an exception will be "thrown" and we can "catch" it 
-       * and deal with the problem gracefully.
-       */
       try
       {
          // Create an ArrayList to store Policy objects
@@ -50,8 +45,11 @@ public class PolicyDemo
             height = Double.parseDouble(inputFile.nextLine().trim());
             weight = Double.parseDouble(inputFile.nextLine().trim());
             
+            // Create a PolicyHolder object
+            PolicyHolder holder = new PolicyHolder(firstName, lastName, age, smokingStatus, height, weight);
+            
             // Create a Policy object
-            Policy policy = new Policy(policyNumber, providerName, firstName, lastName, age, smokingStatus, height, weight);
+            Policy policy = new Policy(policyNumber, providerName, holder);
             
             // Add the Policy object to the ArrayList
             policies.add(policy);
@@ -70,40 +68,23 @@ public class PolicyDemo
          int smokerCount = 0;
          int nonSmokerCount = 0;
          
-         // Display information for each policy
-         for (int i = 0; i < policies.size(); i++)
+         // Display information for each policy and count smokers/non-smokers
+         for (Policy policy : policies)
          {
-            // Get the current policy
-            Policy policy = policies.get(i);
-            
-            // Display policy information
-            System.out.println("Policy Number: " + policy.getPolicyNumber());
+            // Display policy information using implicit toString
+            System.out.println(policy);
             System.out.println();
-            System.out.println("Provider Name: " + policy.getProviderName());
-            System.out.println();
-            System.out.println("Policyholder's First Name: " + policy.getFirstName());
-            System.out.println();
-            System.out.println("Policyholder's Last Name: " + policy.getLastName());
-            System.out.println();
-            System.out.println("Policyholder's Age: " + policy.getAge());
-            System.out.println();
-            System.out.println("Policyholder's Smoking Status (smoker/non-smoker): " + policy.getSmokingStatus());
-            System.out.println();
-            System.out.println("Policyholder's Height: " + policy.getHeight() + " inches");
-            System.out.println();
-            System.out.println("Policyholder's Weight: " + policy.getWeight() + " pounds");
-            System.out.println();
-            System.out.printf("Policyholder's BMI: %.2f\n", policy.getBMI());
-            System.out.println();
-            System.out.printf("Policy Price: $%.2f\n", policy.getPrice());
-            System.out.println("\n");
             
             // Count smokers and non-smokers
-            if (policy.getSmokingStatus().equalsIgnoreCase("smoker"))
+            PolicyHolder holder = policy.getPolicyHolder();
+            if (holder.getSmokingStatus().equalsIgnoreCase("smoker"))
                smokerCount++;
-            else if (policy.getSmokingStatus().equalsIgnoreCase("non-smoker"))
+            else if (holder.getSmokingStatus().equalsIgnoreCase("non-smoker"))
                nonSmokerCount++;
          }
+         
+         // Display the number of policies created
+         System.out.println("There were " + Policy.getPolicyCount() + " Policy objects created.");
          
          // Display the number of smokers and non-smokers
          System.out.println("The number of policies with a smoker is: " + smokerCount);
